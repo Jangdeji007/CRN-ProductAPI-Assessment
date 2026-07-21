@@ -55,4 +55,6 @@ CodeCoverage/
 *.VisualState.xml
 TestResult.xml
 nunit-*.xml
-*.vsidx
+*.vsidx.vs/
+bin/
+obj/
