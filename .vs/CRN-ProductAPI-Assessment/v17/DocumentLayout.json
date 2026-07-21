@@ -1,12 +1,71 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "F:\\CRN_Project\\CRN-ProductAPI-Assessment\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{CD31A6A4-BD41-4389-BA6A-BFFAD7784C9D}|src\\API\\API.csproj|f:\\crn_project\\crn-productapi-assessment\\src\\api\\controllers\\testcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CD31A6A4-BD41-4389-BA6A-BFFAD7784C9D}|src\\API\\API.csproj|solutionrelative:src\\api\\controllers\\testcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CD31A6A4-BD41-4389-BA6A-BFFAD7784C9D}|src\\API\\API.csproj|f:\\crn_project\\crn-productapi-assessment\\src\\api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CD31A6A4-BD41-4389-BA6A-BFFAD7784C9D}|src\\API\\API.csproj|solutionrelative:src\\api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CD31A6A4-BD41-4389-BA6A-BFFAD7784C9D}|src\\API\\API.csproj|f:\\crn_project\\crn-productapi-assessment\\src\\api\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{CD31A6A4-BD41-4389-BA6A-BFFAD7784C9D}|src\\API\\API.csproj|solutionrelative:src\\api\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": []
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "TestController.cs",
+              "DocumentMoniker": "F:\\CRN_Project\\CRN-ProductAPI-Assessment\\src\\API\\Controllers\\TestController.cs",
+              "RelativeDocumentMoniker": "src\\API\\Controllers\\TestController.cs",
+              "ToolTip": "F:\\CRN_Project\\CRN-ProductAPI-Assessment\\src\\API\\Controllers\\TestController.cs",
+              "RelativeToolTip": "src\\API\\Controllers\\TestController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-21T19:26:04.321Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Program.cs",
+              "DocumentMoniker": "F:\\CRN_Project\\CRN-ProductAPI-Assessment\\src\\API\\Program.cs",
+              "RelativeDocumentMoniker": "src\\API\\Program.cs",
+              "ToolTip": "F:\\CRN_Project\\CRN-ProductAPI-Assessment\\src\\API\\Program.cs",
+              "RelativeToolTip": "src\\API\\Program.cs",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAcwBkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-21T19:20:17.534Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "launchSettings.json",
+              "DocumentMoniker": "F:\\CRN_Project\\CRN-ProductAPI-Assessment\\src\\API\\Properties\\launchSettings.json",
+              "RelativeDocumentMoniker": "src\\API\\Properties\\launchSettings.json",
+              "ToolTip": "F:\\CRN_Project\\CRN-ProductAPI-Assessment\\src\\API\\Properties\\launchSettings.json",
+              "RelativeToolTip": "src\\API\\Properties\\launchSettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-07-21T19:13:33.893Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
     }
   ]
 }
