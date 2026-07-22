@@ -24,6 +24,6 @@ DesignTimeBuild/
 # Backup files
 *.backup.json
 
-# Build folders
+.vs/
 bin/
 obj/
