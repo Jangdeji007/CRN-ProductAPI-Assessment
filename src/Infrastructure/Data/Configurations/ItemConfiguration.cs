@@ -22,7 +22,7 @@ namespace CRN.ProductAPI.Infrastructure.Data.Configurations
                    .IsRequired();
 
             builder.HasOne(i => i.Product)
-                   .WithMany(p => p.Items)
+                   .WithMany(p => p.Item)
                    .HasForeignKey(i => i.ProductId)
                    .OnDelete(DeleteBehavior.Cascade);
         }

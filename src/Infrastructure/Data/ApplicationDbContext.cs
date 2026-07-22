@@ -8,9 +8,9 @@ public class ApplicationDbContext : DbContext
     {
     }
 
-    public DbSet<Product> Products => Set<Product>();
+    public DbSet<Product> Product => Set<Product>();
 
-    public DbSet<Item> Items => Set<Item>();
+    public DbSet<Item> Item => Set<Item>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

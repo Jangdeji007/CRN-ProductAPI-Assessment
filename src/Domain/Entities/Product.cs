@@ -14,6 +14,6 @@
 
         public DateTime? ModifiedOn { get; set; }
 
-        public ICollection<Item> Items { get; set; } = new List<Item>();
+        public ICollection<Item> Item { get; set; } = new List<Item>();
     }
 }

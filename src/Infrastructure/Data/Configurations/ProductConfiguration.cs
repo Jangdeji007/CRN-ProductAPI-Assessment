@@ -31,7 +31,7 @@ namespace CRN.ProductAPI.Infrastructure.Data.Configurations
 
             builder.Property(p => p.ModifiedOn);
 
-            builder.HasMany(p => p.Items)
+            builder.HasMany(p => p.Item)
                    .WithOne(i => i.Product)
                    .HasForeignKey(i => i.ProductId)
                    .OnDelete(DeleteBehavior.Cascade);
