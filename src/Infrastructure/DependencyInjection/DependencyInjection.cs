@@ -1,5 +1,7 @@
 ﻿
+using CRN.ProductAPI.Application.Interfaces;
 using CRN.ProductAPI.Application.Interfaces.Repositories;
+using CRN.ProductAPI.Application.Services;
 using CRN.ProductAPI.Infrastructure.Data;
 using CRN.ProductAPI.Infrastructure.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +23,7 @@ namespace CRN.ProductAPI.Infrastructure.DependencyInjection
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IProductService, ProductService>();
 
             return services;
         }

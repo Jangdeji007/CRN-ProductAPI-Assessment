@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CRN.ProductAPI.Application.Comman;
+using CRN.ProductAPI.Application.DTOs.RequestModel;
 
 namespace CRN.ProductAPI.Application.Interfaces
 {
-    internal interface IProductService
+    public interface IProductService
     {
+       Task<Result<string>> AddProduct(AddProductRequestModel request, CancellationToken cancellationToken);
     }
 }
