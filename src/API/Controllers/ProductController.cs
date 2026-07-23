@@ -40,5 +40,13 @@ namespace CRN.ProductAPI.API.Controllers
 
             return result.ToActionResult();
         }
+
+        [HttpDelete("{id:guid}")]
+        public async Task<IActionResult> DeleteProductAsync(Guid id, CancellationToken cancellationToken)
+        {
+            var result = await productService.DeleteProduct(id, cancellationToken);
+
+            return result.ToActionResult();
+        }
     }
 }

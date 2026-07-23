@@ -177,6 +177,24 @@ namespace CRN.ProductAPI.Application.Services
             return Result<ProductResponseModel>.Success(response);
         }
 
+        public async Task<Result<object?>> DeleteProduct(Guid id, CancellationToken cancellationToken)
+        {
+            if (id == Guid.Empty)
+                return Result<object?>.Failure("Product id is required.", 400);
+
+            var productRepository = _unitOfWork.GetRepository<Product>();
+            var product = await productRepository.FindAsync(id);
+
+            if (product is null)
+                return Result<object?>.Failure("Product not found.", 404);
+
+            productRepository.Delete(product);
+
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+            return Result<object?>.Success(null, "Product deleted successfully.", 204);
+        }
+
         private static ProductResponseModel MapToProductResponse(Product product, IReadOnlyList<Item> items)
         {
             return new ProductResponseModel

@@ -13,5 +13,7 @@ namespace CRN.ProductAPI.Application.Interfaces
         Task<Result<PagedResult<ProductResponseModel>>> GetAllProducts(ProductFilterRequestModel filter, CancellationToken cancellationToken);
 
         Task<Result<ProductResponseModel>> UpdateProduct(Guid id, UpdateProductRequestModel request, CancellationToken cancellationToken);
+
+        Task<Result<object?>> DeleteProduct(Guid id, CancellationToken cancellationToken);
     }
 }
