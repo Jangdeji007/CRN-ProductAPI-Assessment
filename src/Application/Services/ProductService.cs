@@ -16,6 +16,7 @@ namespace CRN.ProductAPI.Application.Services
         public async Task<Result<AddProductResponseModel>> AddProduct(AddProductRequestModel request, CancellationToken cancellationToken)
         {
             var validationError = ProductValidator.ValidateAddProduct(request);
+
             if (validationError is not null)
                 return Result<AddProductResponseModel>.Failure(validationError.Message!, validationError.StatusCode);
 
@@ -39,13 +40,9 @@ namespace CRN.ProductAPI.Application.Services
 
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-            return Result<AddProductResponseModel>.Success(
-                new AddProductResponseModel
-                {
-                    ProductId = product.Id,
-                    Message = "Product added successfully."
-                },
-                statusCode: 201);
+            var response = new AddProductResponseModel { ProductId = product.Id, Message = "Product added successfully." };
+
+            return Result<AddProductResponseModel>.Success(response, statusCode: 201);
         }
 
         private static Product MapToProduct(AddProductRequestModel request)
