@@ -1,10 +1,11 @@
 ﻿using CRN.ProductAPI.Application.Comman;
 using CRN.ProductAPI.Application.DTOs.RequestModel;
+using CRN.ProductAPI.Application.DTOs.ResponseModel;
 
 namespace CRN.ProductAPI.Application.Interfaces
 {
     public interface IProductService
     {
-       Task<Result<string>> AddProduct(AddProductRequestModel request, CancellationToken cancellationToken);
+        Task<Result<AddProductResponseModel>> AddProduct(AddProductRequestModel request, CancellationToken cancellationToken);
     }
 }
