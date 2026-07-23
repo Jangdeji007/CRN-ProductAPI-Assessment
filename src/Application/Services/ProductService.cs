@@ -119,6 +119,64 @@ namespace CRN.ProductAPI.Application.Services
             });
         }
 
+        public async Task<Result<ProductResponseModel>> UpdateProduct(Guid id,UpdateProductRequestModel request,CancellationToken cancellationToken)
+        {
+            if (id == Guid.Empty)
+                return Result<ProductResponseModel>.Failure("Product id is required.", 400);
+
+            var validationError = ProductValidator.ValidateUpdateProduct(request);
+
+            if (validationError is not null)
+                return Result<ProductResponseModel>.Failure(validationError.Message!, validationError.StatusCode);
+
+            var productRepository = _unitOfWork.GetRepository<Product>();
+            var product = await productRepository.FindAsync(id);
+
+            if (product is null)
+                return Result<ProductResponseModel>.Failure("Product not found.", 404);
+
+            var nameFilter = new ProductFilterRequestModel { ProductName = request.ProductName };
+            var namePredicate = ProductPredicateBuilder.Build(nameFilter);
+            var productWithSameName = await productRepository.FirstOrDefaultAsync(namePredicate, cancellationToken);
+
+            if (productWithSameName is not null && productWithSameName.Id != id)
+                return Result<ProductResponseModel>.Failure("Product already exists.", 409);
+
+            var itemRepository = _unitOfWork.GetRepository<Item>();
+            var existingItems = await itemRepository.FindAllAsync(i => i.ProductId == id, cancellationToken);
+
+            if (existingItems.Count > 0)
+                itemRepository.DeleteRange(existingItems.ToArray());
+
+            var newItems = request.Item.Select(x => new Item
+            {
+                Id = Guid.NewGuid(),
+                ProductId = id,
+                Quantity = x.Quantity
+            }).ToList();
+
+            await itemRepository.AddRangeAsync(newItems.ToArray());
+
+            product.ProductName = request.ProductName.Trim();
+            product.ModifiedBy = request.ModifiedBy.Trim();
+            product.ModifiedOn = DateTime.UtcNow;
+
+            productRepository.Update(product);
+
+            try
+            {
+                await _unitOfWork.SaveChangesAsync(cancellationToken);
+            }
+            catch (DuplicateResourceException)
+            {
+                return Result<ProductResponseModel>.Failure("Product already exists.", 409);
+            }
+
+            var response = MapToProductResponse(product, newItems);
+
+            return Result<ProductResponseModel>.Success(response);
+        }
+
         private static ProductResponseModel MapToProductResponse(Product product, IReadOnlyList<Item> items)
         {
             return new ProductResponseModel

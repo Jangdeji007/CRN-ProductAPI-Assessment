@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CRN.ProductAPI.Application.DTOs.RequestModel
+﻿namespace CRN.ProductAPI.Application.DTOs.RequestModel
 {
-    internal class UpdateProductRequestModel
+    public class UpdateProductRequestModel
     {
+        public string ProductName { get; set; } = string.Empty;
+
+        public string ModifiedBy { get; set; } = string.Empty;
+
+        public ICollection<AddItemRequestModel> Item { get; set; } = new List<AddItemRequestModel>();
     }
 }

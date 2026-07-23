@@ -32,5 +32,13 @@ namespace CRN.ProductAPI.API.Controllers
 
             return result.ToActionResult();
         }
+
+        [HttpPut("{id:guid}")]
+        public async Task<IActionResult> UpdateProductAsync(Guid id, [FromBody] UpdateProductRequestModel requestModel,CancellationToken cancellationToken)
+        {
+            var result = await productService.UpdateProduct(id, requestModel, cancellationToken);
+
+            return result.ToActionResult();
+        }
     }
 }
