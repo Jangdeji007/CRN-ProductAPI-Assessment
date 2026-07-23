@@ -19,6 +19,9 @@ namespace CRN.ProductAPI.Infrastructure.Data.Configurations
                    .IsRequired()
                    .HasMaxLength(200);
 
+            builder.HasIndex(p => p.ProductName)
+                   .IsUnique();
+
             builder.Property(p => p.CreatedBy)
                    .IsRequired()
                    .HasMaxLength(100);

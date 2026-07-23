@@ -14,13 +14,18 @@ namespace CRN.ProductAPI.Application.PredicateBuilders
             if (request.Id.HasValue)
                 predicate = predicate.And(x => x.Id == request.Id.Value);
 
+            // Relies on SQL Server case-insensitive collation (default CI) so the unique index is usable.
             if (!string.IsNullOrWhiteSpace(request.ProductName))
-                predicate = predicate.And(x =>
-                    x.ProductName.ToLower() == request.ProductName.Trim().ToLower());
+            {
+                var productName = request.ProductName.Trim();
+                predicate = predicate.And(x => x.ProductName == productName);
+            }
 
             if (!string.IsNullOrWhiteSpace(request.CreatedBy))
-                predicate = predicate.And(x =>
-                    x.CreatedBy.ToLower() == request.CreatedBy.Trim().ToLower());
+            {
+                var createdBy = request.CreatedBy.Trim();
+                predicate = predicate.And(x => x.CreatedBy == createdBy);
+            }
 
             if (request.FromCreatedOn.HasValue)
                 predicate = predicate.And(x =>

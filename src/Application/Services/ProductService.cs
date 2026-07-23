@@ -1,6 +1,7 @@
 ﻿using CRN.ProductAPI.Application.Comman;
 using CRN.ProductAPI.Application.DTOs.RequestModel;
 using CRN.ProductAPI.Application.DTOs.ResponseModel;
+using CRN.ProductAPI.Application.Exceptions;
 using CRN.ProductAPI.Application.Interfaces;
 using CRN.ProductAPI.Application.Interfaces.Repositories;
 using CRN.ProductAPI.Application.PredicateBuilders;
@@ -38,11 +39,59 @@ namespace CRN.ProductAPI.Application.Services
 
             await productRepository.AddAsync(product, cancellationToken);
 
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            try
+            {
+                await _unitOfWork.SaveChangesAsync(cancellationToken);
+            }
+            catch (DuplicateResourceException)
+            {
+                return Result<AddProductResponseModel>.Failure("Product already exists.", 409);
+            }
 
             var response = new AddProductResponseModel { ProductId = product.Id, Message = "Product added successfully." };
 
             return Result<AddProductResponseModel>.Success(response, statusCode: 201);
+        }
+
+        public async Task<Result<ProductResponseModel>> GetProductById(Guid id, CancellationToken cancellationToken)
+        {
+            if (id == Guid.Empty)
+                return Result<ProductResponseModel>.Failure("Product id is required.", 400);
+
+            var productRepository = _unitOfWork.GetRepository<Product>();
+
+            var filter = new ProductFilterRequestModel { Id = id };
+            var predicate = ProductPredicateBuilder.Build(filter);
+
+            var product = await productRepository.FirstOrDefaultAsync(predicate, cancellationToken);
+
+            if (product is null)
+                return Result<ProductResponseModel>.Failure("Product not found.", 404);
+
+            var itemRepository = _unitOfWork.GetRepository<Item>();
+            var items = await itemRepository.FindAllAsync(i => i.ProductId == id, cancellationToken);
+
+            var response = MapToProductResponse(product, items);
+
+            return Result<ProductResponseModel>.Success(response);
+        }
+
+        private static ProductResponseModel MapToProductResponse(Product product, IReadOnlyList<Item> items)
+        {
+            return new ProductResponseModel
+            {
+                Id = product.Id,
+                ProductName = product.ProductName,
+                CreatedBy = product.CreatedBy,
+                CreatedOn = product.CreatedOn,
+                ModifiedBy = product.ModifiedBy,
+                ModifiedOn = product.ModifiedOn,
+                Items = items.Select(i => new ItemResponseModel
+                {
+                    Id = i.Id,
+                    Quantity = i.Quantity
+                }).ToList()
+            };
         }
 
         private static Product MapToProduct(AddProductRequestModel request)

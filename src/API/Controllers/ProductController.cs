@@ -16,5 +16,13 @@ namespace CRN.ProductAPI.API.Controllers
 
             return result.ToActionResult();
         }
+
+        [HttpGet("{id:guid}")]
+        public async Task<IActionResult> GetProductByIdAsync(Guid id, CancellationToken cancellationToken)
+        {
+            var result = await productService.GetProductById(id, cancellationToken);
+
+            return result.ToActionResult();
+        }
     }
 }

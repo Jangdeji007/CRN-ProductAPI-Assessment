@@ -7,5 +7,7 @@ namespace CRN.ProductAPI.Application.Interfaces
     public interface IProductService
     {
         Task<Result<AddProductResponseModel>> AddProduct(AddProductRequestModel request, CancellationToken cancellationToken);
+
+        Task<Result<ProductResponseModel>> GetProductById(Guid id, CancellationToken cancellationToken);
     }
 }

@@ -31,6 +31,16 @@ namespace CRN.ProductAPI.Infrastructure.Data.Repositories
                 .FirstOrDefaultAsync(predicate, cancellationToken);
         }
 
+        public async Task<IReadOnlyList<T>> FindAllAsync(
+            Expression<Func<T, bool>> predicate,
+            CancellationToken cancellationToken = default)
+        {
+            return await _entity
+                .AsNoTracking()
+                .Where(predicate)
+                .ToListAsync(cancellationToken);
+        }
+
         public T? Find(params object[] keyValues)
         {
             return _entity.Find(keyValues);

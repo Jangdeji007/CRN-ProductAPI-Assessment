@@ -10,6 +10,8 @@ namespace CRN.ProductAPI.Application.Interfaces.Repositories
 
         Task<T?> FirstOrDefaultAsync(Expression<Func<T, bool>> predicate,CancellationToken cancellationToken = default);
 
+        Task<IReadOnlyList<T>> FindAllAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default);
+
         T? Find(params object[] keyValues);
 
         Task<T?> FindAsync(params object[] keyValues);
