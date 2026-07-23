@@ -76,6 +76,49 @@ namespace CRN.ProductAPI.Application.Services
             return Result<ProductResponseModel>.Success(response);
         }
 
+        public async Task<Result<PagedResult<ProductResponseModel>>> GetAllProducts(ProductFilterRequestModel filter, CancellationToken cancellationToken)
+        {
+            var validationError = ProductValidator.ValidateGetAllProducts(filter);
+
+            if (validationError is not null)
+                return Result<PagedResult<ProductResponseModel>>.Failure(validationError.Message!, validationError.StatusCode);
+
+            var productRepository = _unitOfWork.GetRepository<Product>();
+            var predicate = ProductPredicateBuilder.Build(filter);
+
+            var (products, totalCount) = await productRepository.FindPagedAsync(predicate, filter.PageNumber, filter.PageSize, cancellationToken, p => p.CreatedOn);
+
+            if (products.Count == 0)
+            {
+                return Result<PagedResult<ProductResponseModel>>.Success(new PagedResult<ProductResponseModel>
+                {
+                    Items = Array.Empty<ProductResponseModel>(),
+                    PageNumber = filter.PageNumber,
+                    PageSize = filter.PageSize,
+                    TotalCount = totalCount
+                });
+            }
+
+            var productIds = products.Select(p => p.Id).ToList();
+            var itemRepository = _unitOfWork.GetRepository<Item>();
+            var items = await itemRepository.FindAllAsync(i => productIds.Contains(i.ProductId), cancellationToken);
+            var itemsByProductId = items.GroupBy(i => i.ProductId).ToDictionary(g => g.Key, g => (IReadOnlyList<Item>)g.ToList());
+
+            var responseItems = products.Select(product =>
+            {
+                itemsByProductId.TryGetValue(product.Id, out var productItems);
+                return MapToProductResponse(product, productItems ?? Array.Empty<Item>());
+            }).ToList();
+
+            return Result<PagedResult<ProductResponseModel>>.Success(new PagedResult<ProductResponseModel>
+            {
+                Items = responseItems,
+                PageNumber = filter.PageNumber,
+                PageSize = filter.PageSize,
+                TotalCount = totalCount
+            });
+        }
+
         private static ProductResponseModel MapToProductResponse(Product product, IReadOnlyList<Item> items)
         {
             return new ProductResponseModel

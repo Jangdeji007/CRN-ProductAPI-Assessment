@@ -17,6 +17,14 @@ namespace CRN.ProductAPI.API.Controllers
             return result.ToActionResult();
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetAllProductsAsync([FromQuery] ProductFilterRequestModel filter, CancellationToken cancellationToken)
+        {
+            var result = await productService.GetAllProducts(filter, cancellationToken);
+
+            return result.ToActionResult();
+        }
+
         [HttpGet("{id:guid}")]
         public async Task<IActionResult> GetProductByIdAsync(Guid id, CancellationToken cancellationToken)
         {

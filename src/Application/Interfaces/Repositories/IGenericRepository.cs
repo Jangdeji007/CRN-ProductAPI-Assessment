@@ -12,6 +12,13 @@ namespace CRN.ProductAPI.Application.Interfaces.Repositories
 
         Task<IReadOnlyList<T>> FindAllAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default);
 
+        Task<(IReadOnlyList<T> Items, int TotalCount)> FindPagedAsync(
+            Expression<Func<T, bool>> predicate,
+            int pageNumber,
+            int pageSize,
+            CancellationToken cancellationToken = default,
+            Expression<Func<T, object>>? orderByDescending = null);
+
         T? Find(params object[] keyValues);
 
         Task<T?> FindAsync(params object[] keyValues);

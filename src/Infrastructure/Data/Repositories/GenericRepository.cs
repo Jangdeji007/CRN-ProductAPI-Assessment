@@ -41,6 +41,28 @@ namespace CRN.ProductAPI.Infrastructure.Data.Repositories
                 .ToListAsync(cancellationToken);
         }
 
+        public async Task<(IReadOnlyList<T> Items, int TotalCount)> FindPagedAsync(
+            Expression<Func<T, bool>> predicate,
+            int pageNumber,
+            int pageSize,
+            CancellationToken cancellationToken = default,
+            Expression<Func<T, object>>? orderByDescending = null)
+        {
+            var query = _entity.AsNoTracking().Where(predicate);
+
+            var totalCount = await query.CountAsync(cancellationToken);
+
+            if (orderByDescending is not null)
+                query = query.OrderByDescending(orderByDescending);
+
+            var items = await query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync(cancellationToken);
+
+            return (items, totalCount);
+        }
+
         public T? Find(params object[] keyValues)
         {
             return _entity.Find(keyValues);
