@@ -5,21 +5,28 @@ using CRN.ProductAPI.Application.Exceptions;
 using CRN.ProductAPI.Application.Interfaces;
 using CRN.ProductAPI.Application.Interfaces.Repositories;
 using CRN.ProductAPI.Application.PredicateBuilders;
-using CRN.ProductAPI.Application.Validators;
 using CRN.ProductAPI.Domain.Entities;
+using FluentValidation;
 
 namespace CRN.ProductAPI.Application.Services
 {
-    public class ProductService(IUnitOfWork unitOfWork) : IProductService
+    public class ProductService(
+        IUnitOfWork unitOfWork,
+        IValidator<AddProductRequestModel> addProductValidator,
+        IValidator<UpdateProductRequestModel> updateProductValidator,
+        IValidator<ProductFilterRequestModel> productFilterValidator) : IProductService
     {
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
+        private readonly IValidator<AddProductRequestModel> _addProductValidator = addProductValidator;
+        private readonly IValidator<UpdateProductRequestModel> _updateProductValidator = updateProductValidator;
+        private readonly IValidator<ProductFilterRequestModel> _productFilterValidator = productFilterValidator;
 
         public async Task<Result<AddProductResponseModel>> AddProduct(AddProductRequestModel request, CancellationToken cancellationToken)
         {
-            var validationError = ProductValidator.ValidateAddProduct(request);
+            var validationResult = await _addProductValidator.ValidateAsync(request, cancellationToken);
 
-            if (validationError is not null)
-                return Result<AddProductResponseModel>.Failure(validationError.Message!, validationError.StatusCode);
+            if (!validationResult.IsValid)
+                return Result<AddProductResponseModel>.Failure(validationResult.Errors[0].ErrorMessage, 400);
 
             var productRepository = _unitOfWork.GetRepository<Product>();
 
@@ -78,10 +85,10 @@ namespace CRN.ProductAPI.Application.Services
 
         public async Task<Result<PagedResult<ProductResponseModel>>> GetAllProducts(ProductFilterRequestModel filter, CancellationToken cancellationToken)
         {
-            var validationError = ProductValidator.ValidateGetAllProducts(filter);
+            var validationResult = await _productFilterValidator.ValidateAsync(filter, cancellationToken);
 
-            if (validationError is not null)
-                return Result<PagedResult<ProductResponseModel>>.Failure(validationError.Message!, validationError.StatusCode);
+            if (!validationResult.IsValid)
+                return Result<PagedResult<ProductResponseModel>>.Failure(validationResult.Errors[0].ErrorMessage, 400);
 
             var productRepository = _unitOfWork.GetRepository<Product>();
             var predicate = ProductPredicateBuilder.Build(filter);
@@ -119,15 +126,15 @@ namespace CRN.ProductAPI.Application.Services
             });
         }
 
-        public async Task<Result<ProductResponseModel>> UpdateProduct(Guid id,UpdateProductRequestModel request,CancellationToken cancellationToken)
+        public async Task<Result<ProductResponseModel>> UpdateProduct(Guid id, UpdateProductRequestModel request, CancellationToken cancellationToken)
         {
             if (id == Guid.Empty)
                 return Result<ProductResponseModel>.Failure("Product id is required.", 400);
 
-            var validationError = ProductValidator.ValidateUpdateProduct(request);
+            var validationResult = await _updateProductValidator.ValidateAsync(request, cancellationToken);
 
-            if (validationError is not null)
-                return Result<ProductResponseModel>.Failure(validationError.Message!, validationError.StatusCode);
+            if (!validationResult.IsValid)
+                return Result<ProductResponseModel>.Failure(validationResult.Errors[0].ErrorMessage, 400);
 
             var productRepository = _unitOfWork.GetRepository<Product>();
             var product = await productRepository.FindAsync(id);

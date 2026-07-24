@@ -5,11 +5,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CRN.ProductAPI.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/products")]
     [ApiController]
     public class ProductController(IProductService productService) : ControllerBase
     {
-        [HttpPost("add-product")]
+        [HttpPost]
         public async Task<IActionResult> AddProductAsync([FromBody] AddProductRequestModel requestModel, CancellationToken cancellationToken)
         {
             var result = await productService.AddProduct(requestModel, cancellationToken);

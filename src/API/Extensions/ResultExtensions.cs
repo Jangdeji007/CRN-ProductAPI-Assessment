@@ -13,9 +13,8 @@ namespace CRN.ProductAPI.API.Extensions
             var response = new
             {
                 result.IsSuccess,
-                result.StatusCode,
                 result.Message,
-                Data = result.IsSuccess ? result.Data : default // Use default(T) instead of null
+                Data = result.IsSuccess ? result.Data : default
             };
 
             return new ObjectResult(response) { StatusCode = result.StatusCode };
