@@ -1,19 +1,22 @@
 using CRN.ProductAPI.API.Extensions;
 using CRN.ProductAPI.Application.DependencyInjection;
 using CRN.ProductAPI.Infrastructure.DependencyInjection;
+using CRN.ProductAPI.Infrastructure.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerWithJwt();
 
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddJwtAuthentication(builder.Configuration);
 
 var app = builder.Build();
 
-// Global exception handler — must be first in the pipeline
+await DbSeeder.SeedAsync(app.Services);
+
 app.UseGlobalExceptionMiddleware();
 
 if (app.Environment.IsDevelopment())
@@ -23,6 +26,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 

@@ -11,6 +11,7 @@ namespace CRN.ProductAPI.Application.DependencyInjection
         {
             services.AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly);
             services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IAuthService, AuthService>();
 
             return services;
         }

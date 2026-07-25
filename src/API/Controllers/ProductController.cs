@@ -1,6 +1,7 @@
 ﻿using CRN.ProductAPI.API.Extensions;
 using CRN.ProductAPI.Application.DTOs.RequestModel;
 using CRN.ProductAPI.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CRN.ProductAPI.API.Controllers
@@ -9,6 +10,7 @@ namespace CRN.ProductAPI.API.Controllers
     [ApiController]
     public class ProductController(IProductService productService) : ControllerBase
     {
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> AddProductAsync([FromBody] AddProductRequestModel requestModel, CancellationToken cancellationToken)
         {
@@ -33,14 +35,16 @@ namespace CRN.ProductAPI.API.Controllers
             return result.ToActionResult();
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id:guid}")]
-        public async Task<IActionResult> UpdateProductAsync(Guid id, [FromBody] UpdateProductRequestModel requestModel,CancellationToken cancellationToken)
+        public async Task<IActionResult> UpdateProductAsync(Guid id, [FromBody] UpdateProductRequestModel requestModel, CancellationToken cancellationToken)
         {
             var result = await productService.UpdateProduct(id, requestModel, cancellationToken);
 
             return result.ToActionResult();
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> DeleteProductAsync(Guid id, CancellationToken cancellationToken)
         {
